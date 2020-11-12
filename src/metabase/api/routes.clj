@@ -33,6 +33,7 @@
              [session :as session]
              [setting :as setting]
              [setup :as setup]
+             [telegram :as telegram]
              [slack :as slack]
              [table :as table]
              [task :as task]
@@ -101,6 +102,7 @@
   (context "/slack"                [] (+auth slack/routes))
   (context "/table"                [] (+auth table/routes))
   (context "/task"                 [] (+auth task/routes))
+  (context "/telegram"             [] (+auth telegram/routes))
   (context "/testing"              [] (if (config/config-bool :mb-enable-test-endpoints)
                                         testing/routes
                                         (fn [_ respond _] (respond nil))))

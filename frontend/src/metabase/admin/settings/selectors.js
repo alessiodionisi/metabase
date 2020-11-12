@@ -20,6 +20,7 @@ import SettingsUpdatesForm from "./components/SettingsUpdatesForm";
 import SettingsEmailForm from "./components/SettingsEmailForm";
 import SettingsSetupList from "./components/SettingsSetupList";
 import SettingsSlackForm from "./components/SettingsSlackForm";
+import SettingsTelegramForm from "./components/SettingsTelegramForm";
 
 import { UtilApi } from "metabase/services";
 import { PLUGIN_ADMIN_SETTINGS_UPDATES } from "metabase/plugins";
@@ -190,6 +191,21 @@ const SECTIONS = updateSectionsWithPlugins({
         defaultValue: false,
         required: true,
         autoFocus: false,
+      },
+    ],
+  },
+  telegram: {
+    name: "Telegram",
+    component: SettingsTelegramForm,
+    settings: [
+      {
+        key: "telegram-token",
+        display_name: t`Telegram API Token`,
+        description: "",
+        placeholder: t`Enter the token you received from Telegram`,
+        type: "string",
+        required: false,
+        autoFocus: true,
       },
     ],
   },

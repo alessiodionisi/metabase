@@ -1012,6 +1012,13 @@ Default: `null`
 
 Base-64 encoded public key for this sites SSL certificate. Specify this to enable HTTP Public Key Pinning. Using HPKP is no longer recommended. See http://mzl.la/1EnfqBf for more information.
 
+#### `MB_TELEGRAM_TOKEN`
+
+Type: string<br>
+Default: `null`
+
+Telegram API token obtained from https://t.me/BotFather
+
 #### `MB_VERSION_INFO_URL`
 
 Type: string<br>

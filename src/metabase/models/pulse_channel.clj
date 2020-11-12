@@ -81,7 +81,8 @@
    which contains any other relevant information for defining the channel.  E.g.
 
    {:email {:name \"Email\", :recipients? true}
-    :slack {:name \"Slack\", :recipients? false}}"
+    :slack {:name \"Slack\", :recipients? false}
+    :telegram {:name \"Telegram\", :recipients? false}}"
   {:email {:type              "email"
            :name              "Email"
            :allows_recipients true
@@ -95,7 +96,16 @@
                                 :type        "select"
                                 :displayName "Post to"
                                 :options     []
-                                :required    true}]}})
+                                :required    true}]}
+   :telegram {:type              "telegram"
+              :name              "Telegram"
+              :allows_recipients false
+              :schedules         [:hourly :daily :weekly :monthly]
+              :fields            [{:name        "chats"
+                                   :type        "token_field"
+                                   :displayName "Send to"
+                                   :placeholder "Enter usernames or chat ids you'd like this data to go to"
+                                   :required    true}]}})
 
 (defn channel-type?
   "Is `channel-type` a valid value as a channel type? :tv:"

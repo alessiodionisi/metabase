@@ -2625,6 +2625,18 @@ You must be a superuser to do this.
 
 *  **`slack-settings`** 
 
+## `PUT /api/telegram/settings`
+
+Update Telegram related settings. You must be a superuser to do this.
+
+You must be a superuser to do this.
+
+##### PARAMS:
+
+*  **`telegram-token`** value may be nil, or if non-nil, value must be a non-blank string.
+
+*  **`telegram-settings`** 
+
 
 ## `GET /api/table/`
 

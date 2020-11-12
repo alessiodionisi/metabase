@@ -10,7 +10,9 @@
              [query-processor :as qp]
              [util :as u]]
             [metabase.api.common :as api]
-            [metabase.integrations.slack :as slack]
+            [metabase.integrations
+             [slack :as slack]
+             [telegram :as telegram]]
             [metabase.models
              [card :refer [Card]]
              [collection :as collection]
@@ -123,6 +125,7 @@
   []
   (let [chan-types (-> channel-types
                        (assoc-in [:slack :configured] (slack/slack-configured?))
+                       (assoc-in [:telegram :configured] (telegram/telegram-configured?))
                        (assoc-in [:email :configured] (email/email-configured?)))]
     {:channels (cond
                  (when-let [segmented-user? (resolve 'metabase-enterprise.sandbox.api.util/segmented-user?)]

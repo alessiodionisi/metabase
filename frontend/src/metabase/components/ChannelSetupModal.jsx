@@ -16,7 +16,7 @@ export default class ChannelSetupModal extends Component {
   };
 
   static defaultProps = {
-    channels: ["email", "Slack"],
+    channels: ["email", "Slack", "Telegram"],
   };
 
   render() {
@@ -34,12 +34,12 @@ export default class ChannelSetupModal extends Component {
         fullPageModal={fullPageModal}
         title={
           user.is_superuser
-            ? t`To send ${entityNamePlural}, you'll need to set up ${channels.join(
-                t` or `,
-              )} integration.`
-            : t`To send ${entityNamePlural}, an admin needs to set up ${channels.join(
-                t` or `,
-              )} integration.`
+            ? t`To send ${entityNamePlural}, you'll need to set up ${channels
+                .slice(0, -1)
+                .join(", ")}${t` or `}${channels.slice(-1)} integration.`
+            : t`To send ${entityNamePlural}, an admin needs to set up ${channels
+                .slice(0, -1)
+                .join(", ")}${t` or `}${channels.slice(-1)} integration.`
         }
       >
         <div

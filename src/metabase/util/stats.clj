@@ -14,7 +14,9 @@
              [public-settings :as public-settings]
              [util :as u]]
             [metabase.api.session :as session-api]
-            [metabase.integrations.slack :as slack]
+            [metabase.integrations
+             [slack :as slack]
+             [telegram :as telegram]]
             [metabase.models.humanization :as humanization]
             [metabase.util.i18n :refer [trs]]
             [toucan.db :as db]))
@@ -119,6 +121,7 @@
    :friendly_names       (= (humanization/humanization-strategy) "advanced")
    :email_configured     (email/email-configured?)
    :slack_configured     (slack/slack-configured?)
+   :telegram_configured  (telegram/telegram-configured?)
    :sso_configured       (boolean (session-api/google-auth-client-id))
    :instance_started     (instance-start-date)
    :has_sample_data      (db/exists? Database, :is_sample true)})

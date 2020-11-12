@@ -13,6 +13,7 @@ import Select, { Option } from "metabase/components/Select";
 import Toggle from "metabase/components/Toggle";
 import Icon from "metabase/components/Icon";
 import ChannelSetupMessage from "metabase/components/ChannelSetupMessage";
+import TokenField from "metabase/components/TokenField";
 
 import MetabaseAnalytics from "metabase/lib/analytics";
 
@@ -149,32 +150,96 @@ export default class PulseEditChannels extends Component {
       const value = channel.details && channel.details[field.name];
       return value != null ? value : null; // convert undefined to null so Uncontrollable doesn't ignore changes
     };
+
+    const renderField = field => {
+      switch (field.type) {
+        case "select":
+          return (
+            <Select
+              className="h4 text-bold bg-white inline-block"
+              value={valueForField(field)}
+              placeholder={t`Pick a user or channel...`}
+              searchProp="name"
+              // Address #5799 where `details` object is missing for some reason
+              onChange={o =>
+                this.onChannelPropertyChange(index, "details", {
+                  ...channel.details,
+                  [field.name]: o.target.value,
+                })
+              }
+            >
+              {field.options.map(option => (
+                <Option name={option} value={option}>
+                  {option}
+                </Option>
+              ))}
+            </Select>
+          );
+
+        case "token_field":
+          return (
+            <TokenField
+              // className="input text-bold"
+              // value={valueForField(field)}
+              // onChange={e => 
+              //   this.onChannelPropertyChange(index, "details", {
+              //     ...channel.details,
+              //     [field.name]: e.target.value,
+              //   })
+              // }
+              // placeholder={field.placeholder}
+              value={valueForField(field) || []}
+              placeholder={field.placeholder}
+              options={field.options.map(option => ({ label: option, value: option }))}
+              onChange={value =>
+                this.onChannelPropertyChange(index, "details", {
+                  ...channel.details,
+                  [field.name]: value,
+                })
+              }
+              placeholder={
+                (valueForField(field) || []).length === 0
+                  ? t`Start typing to enter values...`
+                  : null
+              }
+              // autoFocus={autoFocus && recipients.length === 0}
+              multi
+              // valueRenderer={value => value.common_name || value.email}
+              // optionRenderer={option => (
+              //   <div className="flex align-center">
+              //     <span className="text-white">
+              //       <UserAvatar user={option.value} />
+              //     </span>
+              //     <span className="ml1 h4">{option.value.common_name}</span>
+              //   </div>
+              // )}
+              // filterOption={(option, filterString) =>
+              //   // case insensitive search of name or email
+              //   ~option.value.common_name
+              //     .toLowerCase()
+              //     .indexOf(filterString.toLowerCase()) ||
+              //   ~option.value.email.toLowerCase().indexOf(filterString.toLowerCase())
+              // }
+              parseFreeformValue={inputValue => {
+                if (/^[^\s]+$/.test(inputValue)) {
+                  return inputValue;
+                }
+              }}
+              updateOnInputBlur
+            />
+          );
+      
+        default:
+          return null;
+      }
+    }
+
     return (
       <div>
         {channelSpec.fields.map(field => (
           <div key={field.name} className={field.name}>
             <span className="h4 text-bold mr1">{field.displayName}</span>
-            {field.type === "select" ? (
-              <Select
-                className="h4 text-bold bg-white inline-block"
-                value={valueForField(field)}
-                placeholder={t`Pick a user or channel...`}
-                searchProp="name"
-                // Address #5799 where `details` object is missing for some reason
-                onChange={o =>
-                  this.onChannelPropertyChange(index, "details", {
-                    ...channel.details,
-                    [field.name]: o.target.value,
-                  })
-                }
-              >
-                {field.options.map(option => (
-                  <Option name={option} value={option}>
-                    {option}
-                  </Option>
-                ))}
-              </Select>
-            ) : null}
+            {renderField(field)}
           </div>
         ))}
       </div>
@@ -297,6 +362,7 @@ export default class PulseEditChannels extends Component {
     const channels = formInput.channels || {
       email: { name: t`Email`, type: "email" },
       slack: { name: t`Slack`, type: "slack" },
+      telegram: { name: t`Telegram`, type: "telegram" },
     };
     return (
       <ul className="bordered rounded bg-white">
